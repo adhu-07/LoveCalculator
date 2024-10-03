@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love Calculator</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffb3b3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #fff;
+            padding: 50px;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            position: relative;
+            animation: fadeIn 1.5s ease;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #ff6699;
+            margin-bottom: 20px;
+            font-family: 'Brush Script MT', cursive;
+        }
+
+        .input-field {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .input-field input {
+            width: 90%;
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 25px;
+            border: 2px solid #ff6699;
+            outline: none;
+            transition: border 0.3s;
+        }
+
+        .input-field input:focus {
+            border-color: #ff3385;
+        }
+
+        button {
+            background-color: #ff6699;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            outline: none;
+            margin: 10px;
+        }
+
+        button:hover {
+            background-color: #ff3385;
+        }
+
+        #result {
+            font-size: 2rem;
+            color: #ff3385;
+            margin-top: 20px;
+            opacity: 0;
+            animation: fadeInResult 1s forwards;
+        }
+
+        .heart-animation {
+            display: block;
+            margin: 20px auto;
+            width: 100px;
+            height: 100px;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Heart_symbol_red.svg/1024px-Heart_symbol_red.svg.png') no-repeat center/contain;
+            opacity: 0;
+            animation: heartbeat 1.5s infinite ease-in-out, fadeInHeart 1.5s forwards;
+        }
+
+        .progress-container {
+            display: none;
+            width: 100%;
+            background-color: #eee;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .progress-bar {
+            height: 30px;
+            width: 0;
+            background-color: #ff6699;
+            border-radius: 10px;
+            transition: width 2s;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.3);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeInResult {
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInHeart {
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Confetti effect */
+        .confetti {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            pointer-events: none;
+            display: none;
+        }
+
+        .confetti-piece {
+            position: absolute;
+            width: 10px;
+            height: 20px;
+            background-color: #ff6699;
+            animation: confetti-fall 2s ease-in-out infinite;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+            }
+            100% {
+                transform: translateY(800px) rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Love Calculator ❤️</h1>
+    <div class="input-field">
+        <input type="text" id="yourName" placeholder="Your Name">
+    </div>
+    <div class="input-field">
+        <input type="text" id="partnerName" placeholder="Partner's Name">
+    </div>
+    <button onclick="calculateLove()">Calculate Love %</button>
+    <button onclick="resetForm()">Reset</button>
+    
+    <div id="result"></div>
+    <div class="heart-animation" id="heart"></div>
+    <div class="progress-container" id="progressContainer">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <div class="confetti" id="confettiContainer"></div>
+</div>
+
+<script>
+    function calculateLove() {
+        const yourName = document.getElementById('yourName').value.trim();
+        const partnerName = document.getElementById('partnerName').value.trim();
+
+        if (yourName === "" || partnerName === "") {
+            alert("Please enter both names.");
+            return;
+        }
+
+        // Generate a random love percentage between 0% and 100%
+        const lovePercentage = Math.floor(Math.random() * 101);
+
+        // Show progress bar and animate it
+        document.getElementById('progressContainer').style.display = 'block';
+        document.getElementById('progressBar').style.width = `${lovePercentage}%`;
+
+        // Display the result with animation
+        document.getElementById('result').innerHTML = `Love Percentage: ${lovePercentage}% ❤️`;
+        document.getElementById('result').style.opacity = "0";
+        document.getElementById('heart').style.opacity = "0";
+
+        setTimeout(() => {
+            document.getElementById('result').style.opacity = "1";
+            document.getElementById('heart').style.opacity = "1";
+        }, 300);
+
+        // Trigger confetti if love percentage is above 80%
+        if (lovePercentage > 80) {
+            triggerConfetti();
+        } else {
+            document.getElementById('confettiContainer').style.display = "none";
+        }
+    }
+
+    function resetForm() {
+        document.getElementById('yourName').value = '';
+        document.getElementById('partnerName').value = '';
+        document.getElementById('result').innerHTML = '';
+        document.getElementById('heart').style.opacity = "0";
+        document.getElementById('progressBar').style.width = "0";
+        document.getElementById('progressContainer').style.display = "none";
+        document.getElementById('confettiContainer').style.display = "none";
+    }
+
+    function triggerConfetti() {
+        const confettiContainer = document.getElementById('confettiContainer');
+        confettiContainer.style.display = "block";
+
+        // Generate random confetti pieces
+        confettiContainer.innerHTML = '';
+        for (let i = 0; i < 100; i++) {
+            const confettiPiece = document.createElement('div');
+            confettiPiece.classList.add('confetti-piece');
+            confettiPiece.style.left = Math.random() * 100 + '%';
+            confettiPiece.style.animationDelay = Math.random() * 2 + 's';
+            confettiContainer.appendChild(confettiPiece);
+        }
+    }
+</script>
+
+</body>
+</html>
